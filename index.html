@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1d21">
+<title>Guitarra iRig — Limpo &amp; Overdrive</title>
+<style>
+  :root{
+    --chassi:#23272d;
+    --chassi-escuro:#1a1d21;
+    --metal:#3a4048;
+    --linha:#4a515b;
+    --texto:#e8e4da;
+    --texto-fraco:#9aa0a8;
+    --limpo:#5fd3a5;
+    --drive:#ff8c42;
+    --led-off:#3a3f45;
+    --fonte-display:'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+    --fonte-corpo:-apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:var(--chassi-escuro);
+    color:var(--texto);
+    font-family:var(--fonte-corpo);
+    display:flex;
+    justify-content:center;
+    min-height:100%;
+  }
+  .pedal{
+    width:100%;
+    max-width:420px;
+    min-height:100vh;
+    background:linear-gradient(180deg,var(--chassi) 0%,var(--chassi-escuro) 100%);
+    display:flex;
+    flex-direction:column;
+    padding:20px 22px 28px;
+    gap:18px;
+  }
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:2px solid var(--linha);
+    padding-bottom:12px;
+  }
+  h1{
+    font-family:var(--fonte-display);
+    font-size:20px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+  }
+  h1 span{color:var(--limpo)}
+  .led{
+    width:14px;height:14px;border-radius:50%;
+    background:var(--led-off);
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.6);
+    transition:background .2s, box-shadow .2s;
+  }
+  .led.on-limpo{background:var(--limpo);box-shadow:0 0 12px var(--limpo)}
+  .led.on-drive{background:var(--drive);box-shadow:0 0 12px var(--drive)}
+
+  /* Medidor de sinal */
+  .medidor{
+    height:10px;
+    background:var(--chassi-escuro);
+    border:1px solid var(--linha);
+    border-radius:5px;
+    overflow:hidden;
+  }
+  .medidor-barra{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--limpo) 60%,#ffd24a 85%,#ff5c5c 100%);
+    transition:width .06s linear;
+  }
+  .medidor-rotulo{
+    font-size:11px;
+    color:var(--texto-fraco);
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-top:5px;
+  }
+
+  /* Botão de ligar */
+  .ligar{
+    font-family:var(--fonte-display);
+    font-size:18px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    padding:20px;
+    border:none;
+    border-radius:12px;
+    background:var(--limpo);
+    color:#10231b;
+    cursor:pointer;
+    box-shadow:0 4px 0 #2e8a67;
+  }
+  .ligar:active{transform:translateY(3px);box-shadow:0 1px 0 #2e8a67}
+  .ligar[disabled]{opacity:.5}
+
+  /* Canais (footswitches) */
+  .canais{display:flex;gap:14px}
+  .canal{
+    flex:1;
+    padding:26px 10px 20px;
+    border-radius:14px;
+    border:2px solid var(--linha);
+    background:var(--metal);
+    color:var(--texto-fraco);
+    font-family:var(--fonte-display);
+    font-size:16px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    cursor:pointer;
+    position:relative;
+    box-shadow:0 5px 0 rgba(0,0,0,.45);
+    transition:color .15s, border-color .15s;
+  }
+  .canal:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.45)}
+  .canal::before{
+    content:'';
+    position:absolute;
+    top:10px;left:50%;
+    transform:translateX(-50%);
+    width:10px;height:10px;border-radius:50%;
+    background:var(--led-off);
+  }
+  .canal.ativo-limpo{border-color:var(--limpo);color:var(--limpo)}
+  .canal.ativo-limpo::before{background:var(--limpo);box-shadow:0 0 10px var(--limpo)}
+  .canal.ativo-drive{border-color:var(--drive);color:var(--drive)}
+  .canal.ativo-drive::before{background:var(--drive);box-shadow:0 0 10px var(--drive)}
+
+  /* Controles */
+  .controle{display:flex;flex-direction:column;gap:8px}
+  .controle label{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    color:var(--texto-fraco);
+  }
+  .controle label b{color:var(--texto);font-weight:600}
+  input[type=range]{
+    -webkit-appearance:none;
+    width:100%;
+    height:34px;
+    background:transparent;
+  }
+  input[type=range]::-webkit-slider-runnable-track{
+    height:6px;
+    background:var(--chassi-escuro);
+    border:1px solid var(--linha);
+    border-radius:3px;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:30px;height:30px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#666e78,#2b3036 70%);
+    border:2px solid var(--linha);
+    margin-top:-13px;
+    box-shadow:0 2px 4px rgba(0,0,0,.5);
+  }
+  .so-drive{
+    opacity:.35;
+    pointer-events:none;
+    transition:opacity .2s;
+  }
+  .so-drive.habilitado{opacity:1;pointer-events:auto}
+
+  .aviso{
+    font-size:13px;
+    line-height:1.5;
+    color:var(--texto-fraco);
+    background:var(--chassi-escuro);
+    border:1px solid var(--linha);
+    border-left:4px solid var(--drive);
+    border-radius:8px;
+    padding:12px 14px;
+  }
+  .status{
+    font-size:12px;
+    color:var(--texto-fraco);
+    text-align:center;
+    min-height:16px;
+  }
+  footer{
+    margin-top:auto;
+    text-align:center;
+    font-size:11px;
+    letter-spacing:1px;
+    color:var(--texto-fraco);
+    text-transform:uppercase;
+    border-top:1px solid var(--linha);
+    padding-top:12px;
+  }
+</style>
+</head>
+<body>
+<div class="pedal">
+  <header>
+    <h1>Guitarra <span>iRig</span></h1>
+    <div class="led" id="led"></div>
+  </header>
+
+  <div class="aviso" id="aviso">
+    🎸 Plugue a guitarra no iRig, o iRig no celular e <b>use fone de ouvido na saída do iRig</b> (sem fone dá microfonia). Depois toque em LIGAR e permita o uso do microfone — é por ali que o som da guitarra entra.
+  </div>
+
+  <button class="ligar" id="btnLigar">▶ Ligar</button>
+
+  <div>
+    <div class="medidor"><div class="medidor-barra" id="barra"></div></div>
+    <div class="medidor-rotulo">Sinal de entrada</div>
+  </div>
+
+  <div class="canais">
+    <button class="canal" id="btnLimpo">Limpo</button>
+    <button class="canal" id="btnDrive">Overdrive</button>
+  </div>
+
+  <div class="controle">
+    <label>Volume <b id="vVolume">70</b></label>
+    <input type="range" id="volume" min="0" max="100" value="70">
+  </div>
+
+  <div class="controle so-drive" id="ctlDrive">
+    <label>Drive (ganho) <b id="vDrive">50</b></label>
+    <input type="range" id="drive" min="0" max="100" value="50">
+  </div>
+
+  <div class="controle so-drive" id="ctlTom">
+    <label>Tom <b id="vTom">60</b></label>
+    <input type="range" id="tom" min="0" max="100" value="60">
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <footer>Livre e gratuito — compartilhe com quem precisar</footer>
+</div>
+
+<script>
+(function(){
+  var ctx=null, stream=null;
+  var source, ganhoLimpo, ganhoDrive, preDrive, shaper, filtroTom, posDrive, mestre, analyser;
+  var modo='limpo';
+  var ligado=false;
+
+  var $=function(id){return document.getElementById(id)};
+  var btnLigar=$('btnLigar'), btnLimpo=$('btnLimpo'), btnDrive=$('btnDrive');
+  var led=$('led'), barra=$('barra'), status=$('status');
+  var sVolume=$('volume'), sDrive=$('drive'), sTom=$('tom');
+
+  function curvaOverdrive(quantidade){
+    // Curva de soft-clipping (tanh) — quanto maior o drive, mais saturação
+    var n=2048, curva=new Float32Array(n);
+    var k=quantidade; // 1 a ~40
+    for(var i=0;i<n;i++){
+      var x=(i*2)/n-1;
+      curva[i]=Math.tanh(k*x)/Math.tanh(k);
+    }
+    return curva;
+  }
+
+  function aplicaDrive(){
+    var v=parseInt(sDrive.value,10);
+    $('vDrive').textContent=v;
+    if(!shaper) return;
+    var k=1+(v/100)*24; // 1..25
+    shaper.curve=curvaOverdrive(k);
+    // Compensa volume: mais drive = mais compressão, reduz um pouco a saída
+    posDrive.gain.value=0.9/(1+v/160);
+  }
+  function aplicaTom(){
+    var v=parseInt(sTom.value,10);
+    $('vTom').textContent=v;
+    if(!filtroTom) return;
+    // 800 Hz (escuro) até ~6 kHz (brilhante)
+    filtroTom.frequency.value=800+Math.pow(v/100,2)*5200;
+  }
+  function aplicaVolume(){
+    var v=parseInt(sVolume.value,10);
+    $('vVolume').textContent=v;
+    if(mestre) mestre.gain.value=Math.pow(v/100,1.5)*1.6;
+  }
+
+  function setModo(novo){
+    modo=novo;
+    if(ganhoLimpo&&ganhoDrive){
+      var t=ctx.currentTime;
+      // Troca suave em 30ms pra não dar estalo
+      ganhoLimpo.gain.setTargetAtTime(modo==='limpo'?1:0,t,0.015);
+      ganhoDrive.gain.setTargetAtTime(modo==='drive'?1:0,t,0.015);
+    }
+    btnLimpo.className='canal'+(modo==='limpo'?' ativo-limpo':'');
+    btnDrive.className='canal'+(modo==='drive'?' ativo-drive':'');
+    var d=modo==='drive';
+    $('ctlDrive').className='controle so-drive'+(d?' habilitado':'');
+    $('ctlTom').className='controle so-drive'+(d?' habilitado':'');
+    if(ligado) led.className='led '+(d?'on-drive':'on-limpo');
+  }
+
+  function medidor(){
+    if(!analyser) return;
+    var dados=new Uint8Array(analyser.fftSize);
+    function loop(){
+      if(!ligado) { barra.style.width='0%'; return; }
+      analyser.getByteTimeDomainData(dados);
+      var pico=0;
+      for(var i=0;i<dados.length;i++){
+        var a=Math.abs(dados[i]-128)/128;
+        if(a>pico) pico=a;
+      }
+      barra.style.width=Math.min(100,pico*130)+'%';
+      requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  function ligar(){
+    btnLigar.disabled=true;
+    status.textContent='Pedindo acesso ao áudio…';
+    var pedido={
+      audio:{
+        echoCancellation:false,
+        noiseSuppression:false,
+        autoGainControl:false,
+        latency:0
+      }
+    };
+    navigator.mediaDevices.getUserMedia(pedido).then(function(s){
+      stream=s;
+      var AC=window.AudioContext||window.webkitAudioContext;
+      ctx=new AC({latencyHint:'interactive'});
+
+      source=ctx.createMediaStreamSource(stream);
+      analyser=ctx.createAnalyser();
+      analyser.fftSize=512;
+
+      // Caminho LIMPO
+      ganhoLimpo=ctx.createGain();
+
+      // Caminho OVERDRIVE: pré-ganho -> saturação -> tom -> compensação
+      preDrive=ctx.createGain();
+      preDrive.gain.value=3.5;
+      shaper=ctx.createWaveShaper();
+      shaper.oversample='4x';
+      filtroTom=ctx.createBiquadFilter();
+      filtroTom.type='lowpass';
+      posDrive=ctx.createGain();
+      ganhoDrive=ctx.createGain();
+
+      mestre=ctx.createGain();
+
+      source.connect(analyser);
+      source.connect(ganhoLimpo);
+      ganhoLimpo.connect(mestre);
+
+      source.connect(preDrive);
+      preDrive.connect(shaper);
+      shaper.connect(filtroTom);
+      filtroTom.connect(posDrive);
+      posDrive.connect(ganhoDrive);
+      ganhoDrive.connect(mestre);
+
+      mestre.connect(ctx.destination);
+
+      aplicaVolume(); aplicaDrive(); aplicaTom();
+      ligado=true;
+      setModo('limpo');
+      medidor();
+
+      btnLigar.textContent='■ Desligar';
+      btnLigar.disabled=false;
+      btnLigar.onclick=desligar;
+      status.textContent='Ligado — toque a guitarra e veja o medidor.';
+      $('aviso').style.display='none';
+    }).catch(function(e){
+      btnLigar.disabled=false;
+      status.textContent='Não consegui acessar o áudio: '+(e.name==='NotAllowedError'?'permissão negada. Permita o microfone nas configurações do navegador.':e.message);
+    });
+  }
+
+  function desligar(){
+    ligado=false;
+    if(stream) stream.getTracks().forEach(function(t){t.stop()});
+    if(ctx) ctx.close();
+    ctx=null; stream=null;
+    led.className='led';
+    barra.style.width='0%';
+    btnLigar.textContent='▶ Ligar';
+    btnLigar.onclick=ligar;
+    status.textContent='Desligado.';
+  }
+
+  btnLigar.onclick=ligar;
+  btnLimpo.onclick=function(){ setModo('limpo') };
+  btnDrive.onclick=function(){ setModo('drive') };
+  sVolume.oninput=aplicaVolume;
+  sDrive.oninput=aplicaDrive;
+  sTom.oninput=aplicaTom;
+
+  setModo('limpo');
+})();
+</script>
+</body>
+</html>
