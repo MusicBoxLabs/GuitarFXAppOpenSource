@@ -24,3 +24,17 @@ com canal **limpo** e **overdrive**, usando a biblioteca Oboe do Google
 
 O APK pode ser distribuído livremente (link direto, site, F-Droid).
 Licença sugerida: MIT — use, copie e modifique à vontade.
+
+## Apoie o projeto (doação via PIX)
+Este app é gratuito e de código aberto. Se ele foi útil pra você, considere uma doação via PIX:
+
+**Chave aleatória:** `fce13f3c-310d-4c5a-8816-efb2e0458842`
+**Beneficiário:** Claudio Jose Toldo — Criciúma/SC
+
+![QR Code PIX](pix_qrcode.png)
+
+Ou copie o código abaixo e cole no Pix Copia e Cola do app do seu banco:
+
+```
+00020101021126580014br.gov.bcb.pix0136fce13f3c-310d-4c5a-8816-efb2e04588425204000053039865802BR5918CLAUDIO JOSE TOLDO6008CRICIUMA62070503***6304BDB9
+```
