@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_chassi"
+    android:fillViewport="true">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Cabeçalho estilo placa de amplificador -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="6dp">
+
+        <View android:layout_width="14dp" android:layout_height="14dp"
+            android:background="@drawable/parafuso"
+            android:layout_alignParentLeft="true"/>
+        <View android:layout_width="14dp" android:layout_height="14dp"
+            android:background="@drawable/parafuso"
+            android:layout_alignParentRight="true"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_centerHorizontal="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GuitarFX"
+                android:textColor="#E8DCC0"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:fontFamily="serif"
+                android:letterSpacing="0.05"
+                android:shadowColor="#000000"
+                android:shadowDx="0" android:shadowDy="2" android:shadowRadius="3"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="— TUBE  DRIVE  •  iRIG —"
+                android:textColor="#B58834"
+                android:textSize="11sp"
+                android:fontFamily="serif"
+                android:letterSpacing="0.2"
+                android:paddingTop="2dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Divisória dupla estilo gravação em metal -->
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+        android:background="#5A4415" android:layout_marginTop="4dp"/>
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+        android:background="#0E0B08" android:layout_marginBottom="16dp"/>
+
+    <!-- Placa dos controles -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_placa"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/btnPower"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="POWER  ▸  STANDBY"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:fontFamily="serif"
+            android:letterSpacing="0.1"
+            android:textColor="#2A1F0A"
+            android:background="@drawable/btn_power"/>
+
+        <!-- VU meter -->
+        <TextView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="INPUT" android:textColor="#8A6420"
+            android:textSize="10sp" android:fontFamily="serif"
+            android:letterSpacing="0.25" android:paddingTop="14dp" android:paddingBottom="4dp"/>
+        <ProgressBar
+            android:id="@+id/meter"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:max="100"
+            android:progressTint="#D9A441"
+            android:progressBackgroundTint="#1A1611"/>
+
+        <!-- Canais -->
+        <TextView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="VOICING" android:textColor="#8A6420"
+            android:textSize="10sp" android:fontFamily="serif"
+            android:letterSpacing="0.25" android:paddingTop="16dp" android:paddingBottom="6dp"/>
+
+        <Button android:id="@+id/btnClean"
+            android:layout_width="match_parent" android:layout_height="50dp"
+            android:text="CLEAN" android:textStyle="bold" android:fontFamily="serif"
+            android:letterSpacing="0.15" android:textColor="#E8DCC0"
+            android:background="@drawable/btn_canal_off"/>
+        <Button android:id="@+id/btnDrive"
+            android:layout_width="match_parent" android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:text="TUBE  DRIVE" android:textStyle="bold" android:fontFamily="serif"
+            android:letterSpacing="0.15" android:textColor="#E8DCC0"
+            android:background="@drawable/btn_canal_off"/>
+        <Button android:id="@+id/btnMod"
+            android:layout_width="match_parent" android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:text="MODULATION" android:textStyle="bold" android:fontFamily="serif"
+            android:letterSpacing="0.15" android:textColor="#E8DCC0"
+            android:background="@drawable/btn_canal_off"/>
+
+        <Button android:id="@+id/btnRec"
+            android:layout_width="match_parent" android:layout_height="46dp"
+            android:layout_marginTop="14dp"
+            android:text="●  REC" android:textStyle="bold" android:fontFamily="serif"
+            android:letterSpacing="0.2" android:textColor="#F0E0D0"
+            android:background="@drawable/btn_rec"/>
+
+        <!-- Knobs (sliders) -->
+        <TextView android:id="@+id/inGainLabel"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="18dp" android:text="GAIN" android:fontFamily="serif"
+            android:textColor="#C9B896" android:textSize="12sp" android:letterSpacing="0.15"/>
+        <SeekBar android:id="@+id/inGain"
+            android:layout_width="match_parent" android:layout_height="30dp"
+            android:max="100" android:progressTint="#B58834" android:thumbTint="#D9A441"/>
+
+        <TextView android:id="@+id/volumeLabel"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" android:text="MASTER" android:fontFamily="serif"
+            android:textColor="#C9B896" android:textSize="12sp" android:letterSpacing="0.15"/>
+        <SeekBar android:id="@+id/volume"
+            android:layout_width="match_parent" android:layout_height="30dp"
+            android:max="100" android:progressTint="#B58834" android:thumbTint="#D9A441"/>
+
+        <TextView android:id="@+id/driveLabel"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" android:text="DRIVE" android:fontFamily="serif"
+            android:textColor="#C9B896" android:textSize="12sp" android:letterSpacing="0.15"/>
+        <SeekBar android:id="@+id/drive"
+            android:layout_width="match_parent" android:layout_height="30dp"
+            android:max="100" android:progressTint="#B58834" android:thumbTint="#D9A441"/>
+
+        <TextView android:id="@+id/toneLabel"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" android:text="TONE" android:fontFamily="serif"
+            android:textColor="#C9B896" android:textSize="12sp" android:letterSpacing="0.15"/>
+        <SeekBar android:id="@+id/tone"
+            android:layout_width="match_parent" android:layout_height="30dp"
+            android:max="100" android:progressTint="#B58834" android:thumbTint="#D9A441"/>
+
+        <TextView android:id="@+id/fxLabel"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" android:text="DELAY / CHORUS" android:fontFamily="serif"
+            android:textColor="#C9B896" android:textSize="12sp" android:letterSpacing="0.15"/>
+        <SeekBar android:id="@+id/fx"
+            android:layout_width="match_parent" android:layout_height="30dp"
+            android:max="100" android:progressTint="#B58834" android:thumbTint="#D9A441"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="Plugue o iRig • fone na saída dele • POWER pra ligar"
+        android:textColor="#8A7A5A"
+        android:textSize="11sp"
+        android:fontFamily="serif"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="HAND‑WIRED  •  FREE &amp; OPEN"
+        android:textColor="#4A4030"
+        android:textSize="9sp"
+        android:fontFamily="serif"
+        android:letterSpacing="0.3"/>
+
+</LinearLayout>
+</ScrollView>
